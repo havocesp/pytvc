@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
-
 from setuptools import setup, find_packages
-import sys
-sys.path.append(os.path.dirname(__file__))
-from . import pvtvc
+
+import pytvc
 
 classifiers = [
     'Development Status :: 5 - Production',
