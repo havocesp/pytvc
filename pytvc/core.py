@@ -12,10 +12,11 @@ import ccxt
 
 def watchlist_formatter(exchange, symbols):
     """
+    Returns symbols formatted using tradingview specs.
 
-    :param exchange:
-    :param list symbols:
-    :return:
+    :param str exchange: exchange name used as prefix.
+    :param list symbols: symbols str list.
+    :return list: symbols list after formatting process.
     """
     exchange = exchange.upper()
     template = '{}:{}{}'
@@ -96,26 +97,49 @@ class TradingViewChart:
 
         @classmethod
         def as_dict(cls):
+            """
+            Returns a dict with indicator data.
+            :return dict: generate dict generated from indicators short names as keys and long names as values.
+            """
             return dict(cls.__dict__['__annotations__'])
 
         @classmethod
         def keys(cls):
+            """
+            Returns indicators short names as list .
+
+            :return list: dict with indicator data.
+            """
             return list(sorted(cls.as_dict().keys()))
 
         @classmethod
         def values(cls):
+            """
+            Returns indicators long names as list.
+
+            :return list:
+            """
             return list(sorted(cls.as_dict().values()))
 
         @classmethod
         def to_json(cls):
+            """
+            Returns a JSON indicators serialized with short names as keys and long names values.
+
+            :return str: a JSON indicators serialized with short names as keys and long names values.
+            """
             return json.dumps(cls.as_dict(), indent=2)
 
     def get_watchlist(self, exchange, market=None):
         """
+        Returns a formatted symbols list belonging to "market" will be returned after apply a format process based
+        on tradingview specs
 
-        :param exchange:
-        :param market:
-        :return:
+        :param str exchange: a valid exchange name (example: BINANCE)
+        :param str market: if set, only symbols on specific market will be return, this is, if market is set as USDT,
+                           only symbols ending in USDT (like BTC/USDT) will be return.
+        :return list: a formatted symbols list belonging to "market" will be returned after apply a format process based
+                      on tradingview specs.
         """
         exchange = str(exchange).lower()
 
@@ -190,4 +214,5 @@ class TradingViewChart:
 
 @begin
 def main(exchange, quote_currency=None):
+    """TradingView Charts launcher"""
     TradingViewChart().launch(exchange, quote_currency)
