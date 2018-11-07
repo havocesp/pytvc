@@ -44,6 +44,11 @@ pytvc binance cryptopia hitbtc --loop
 
 ## ChangeLog
 
+### 0.1.1
+- Removed duplicate "pytvc" dir
+- Writed some project details at README.md
+- Minor errors fixed
+
 ### 0.1.0
 
 - Initial version
