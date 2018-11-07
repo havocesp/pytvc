@@ -18,6 +18,7 @@ sys.path.append(os.path.dirname(__file__))
 from pytvc.core import TradingViewChart
 
 __project__ = 'PyTVC'
+__package__ = 'pytvc'
 __author__ = 'Daniel J. Umpierrez'
 __license__ = 'UNLICENSE'
 __version__ = '0.1.0'
