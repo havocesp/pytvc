@@ -15,6 +15,7 @@ Just a simple browser launcher TradingView Chart launcher  with  widget
 $ git clone https://github.com/havocesp/pytvc
 $ cd pytvc
 $ pip install -r requirements.txt
+$ pip install -r https://raw.githubusercontent.com/havocesp/pytvc/master/requirements.txt
 $ pip install .
 ```
 
