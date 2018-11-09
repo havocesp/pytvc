@@ -176,6 +176,7 @@ class TradingViewChart:
         Launch an embedded "tradingview.com" widget in "app" mode (if available) with default web browser.
 
         :param str exchange: a valid exchange name (example: BINANCE)
+        :param str quote_currency: a valid quote currency.
         :param indicators: list of indicators short names to show.
         :param options: [interval, theme, details, hotlist, calendar, news, hide_side_toolbar, locale, withdateranges]
         """
