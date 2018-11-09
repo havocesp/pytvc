@@ -11,12 +11,14 @@ classifiers = [
     'Programming Language :: Python :: 3.7',
 ]
 
-exclude = ['.idea*', 'build*', '{}.egg-info*'.format(__package__), 'dist*', 'venv*', 'doc*', 'lab*']
+exclude = ['.idea*', 'build*', '{}.egg-info*'.format(pytvc.__package__), 'dist*', 'venv*', 'doc*', 'lab*']
 
 setup(
     name=pytvc.__package__,
     version=pytvc.__version__,
     packages=find_packages(exclude=exclude),
+    package_dir={pytvc.__package__: pytvc.__package__},
+    package_data={pytvc.__package__: ['html/*.*']},
     entry_points={
         'console_scripts': [
             'pytvc = pytvc.cli:main.start'
