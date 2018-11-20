@@ -21,7 +21,7 @@ setup(
     package_data={pytvc.__package__: ['html/*.*']},
     entry_points={
         'console_scripts': [
-            'pytvc = pytvc.cli:main.start'
+            'pytvc = pytvc.cli:run'
         ]
     },
     url=pytvc.__site__,
