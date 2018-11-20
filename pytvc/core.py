@@ -2,14 +2,53 @@
 """
 Core module.
 """
+import inspect as insp
 import json
 import webbrowser
 from pathlib import Path
 
-import begin
 import ccxt
 
+_EX_SYMBOL_FMT = '{}:{}{}'
 
+
+def checker(func):
+    """
+
+    :param function func:
+    :return:
+    """
+
+    def wrapper(*args, **kwargs):
+        args = list(args)
+        kwargs = dict(kwargs)
+        func_sign = insp.signature(func)
+        params = func_sign.parameters
+        params_list = list(params.keys())
+
+        if len(args) and len(params_list):
+            for pos, param in enumerate(params):
+                if param in 'exchange':
+                    if str(args[pos]).lower() in ccxt.exchanges:
+                        args[pos] = str(args[pos]).upper()
+                        params_list.remove('exchange')
+                    else:
+                        raise ValueError('Exchange {} is not supported'.format(str(args[pos].upper())))
+                if param in 'currency' or param in 'symbol' and args[pos] is not None and isinstance(args[pos], str):
+                    args[pos] = str(args[pos]).upper()
+                if param in 'symbols' or param in 'currencies' and isinstance(args[pos], (set, list, tuple)):
+                    args[pos] = list(map(str.upper, args[pos]))
+        elif len(kwargs) and len(params_list):
+            for p in list(params_list):
+                if p in kwargs:
+                    args.append(kwargs.get(p))
+        return func(*args)
+
+    return wrapper
+    # return decorator
+
+
+@checker
 def watchlist_formatter(exchange, symbols):
     """
     Returns symbols formatted using tradingview specs.
@@ -18,9 +57,8 @@ def watchlist_formatter(exchange, symbols):
     :param list symbols: symbols str list.
     :return list: symbols list after formatting process.
     """
-    exchange = exchange.upper()
-    template = '{}:{}{}'
-    result = [template.format(exchange, *s.split('/')) for s in symbols]
+    exchange = str(exchange).upper()
+    result = [_EX_SYMBOL_FMT.format(exchange, *s.split('/')) for s in symbols]
     return result
 
 
@@ -29,110 +67,9 @@ class TradingViewChart:
     TradingView settings handler.
     """
 
-    class Indicators:
-        """
-        Supported indicators references.
-        """
-        ACCD = "ACCD@tv-basicstudies"
-        studyADR = "studyADR@tv-basicstudies"
-        AROON = "AROON@tv-basicstudies"
-        ATR = "ATR@tv-basicstudies"
-        AwesomeOscillator = "AwesomeOscillator@tv-basicstudies"
-        BB = "BB@tv-basicstudies"
-        BollingerBandsR = "BollingerBandsR@tv-basicstudies"
-        BollingerBandsWidth = "BollingerBandsWidth@tv-basicstudies"
-        CMF = "CMF@tv-basicstudies"
-        ChaikinOscillator = "ChaikinOscillator@tv-basicstudies"
-        chandeMO = "chandeMO@tv-basicstudies"
-        ChoppinessIndex = "ChoppinessIndex@tv-basicstudies"
-        CCI = "CCI@tv-basicstudies"
-        CRSI = "CRSI@tv-basicstudies"
-        CorrelationCoefficient = "CorrelationCoefficient@tv-basicstudies"
-        DetrendedPriceOscillator = "DetrendedPriceOscillator@tv-basicstudies"
-        DM = "DM@tv-basicstudies"
-        DONCH = "DONCH@tv-basicstudies"
-        DoubleEMA = "DoubleEMA@tv-basicstudies"
-        EaseOfMovement = "EaseOfMovement@tv-basicstudies"
-        EFI = "EFI@tv-basicstudies"
-        ENV = "ENV@tv-basicstudies"
-        FisherTransform = "FisherTransform@tv-basicstudies"
-        HV = "HV@tv-basicstudies"
-        hullMA = "hullMA@tv-basicstudies"
-        IchimokuCloud = "IchimokuCloud@tv-basicstudies"
-        KLTNR = "KLTNR@tv-basicstudies"
-        KST = "KST@tv-basicstudies"
-        LinearRegression = "LinearRegression@tv-basicstudies"
-        MACD = "MACD@tv-basicstudies"
-        MOM = "MOM@tv-basicstudies"
-        MF = "MF@tv-basicstudies"
-        MoonPhases = "MoonPhases@tv-basicstudies"
-        MASimple = "MASimple@tv-basicstudies"
-        MAExp = "MAExp@tv-basicstudies"
-        MAWeighted = "MAWeighted@tv-basicstudies"
-        OBV = "OBV@tv-basicstudies"
-        PSAR = "PSAR@tv-basicstudies"
-        PivotPointsHighLow = "PivotPointsHighLow@tv-basicstudies"
-        PivotPointsStandard = "PivotPointsStandard@tv-basicstudies"
-        PriceOsc = "PriceOsc@tv-basicstudies"
-        PriceVolumeTrend = "PriceVolumeTrend@tv-basicstudies"
-        ROC = "ROC@tv-basicstudies"
-        RSI = "RSI@tv-basicstudies"
-        VigorIndex = "VigorIndex@tv-basicstudies"
-        VolatilityIndex = "VolatilityIndex@tv-basicstudies"
-        SMIErgodicIndicator = "SMIErgodicIndicator@tv-basicstudies"
-        SMIErgodicOscillator = "SMIErgodicOscillator@tv-basicstudies"
-        Stochastic = "Stochastic@tv-basicstudies"
-        StochasticRSI = "StochasticRSI@tv-basicstudies"
-        TripleEMA = "TripleEMA@tv-basicstudies"
-        Trix = "Trix@tv-basicstudies"
-        UltimateOsc = "UltimateOsc@tv-basicstudies"
-        VSTOP = "VSTOP@tv-basicstudies"
-        Volume = "Volume@tv-basicstudies"
-        VWAP = "VWAP@tv-basicstudies"
-        MAVolumeWeighted = "MAVolumeWeighted@tv-basicstudies"
-        WilliamR = "WilliamR@tv-basicstudies"
-        WilliamsAlligator = "WilliamsAlligator@tv-basicstudies"
-        WilliamsFractal = "WilliamsFractal@tv-basicstudies"
-        ZigZag = "ZigZag@tv-basicstudies"
-
-        @classmethod
-        def as_dict(cls):
-            """
-            Returns a dict with indicator data.
-            :return dict: generate dict generated from indicators short names as keys and long names as values.
-            """
-            return dict(cls.__dict__['__annotations__'])
-
-        @classmethod
-        def keys(cls):
-            """
-            Returns indicators short names as list .
-
-            :return list: dict with indicator data.
-            """
-            return list(sorted(cls.as_dict().keys()))
-
-        @classmethod
-        def values(cls):
-            """
-            Returns indicators long names as list.
-
-            :return list:
-            """
-            return list(sorted(cls.as_dict().values()))
-
-        @classmethod
-        def to_json(cls):
-            """
-            Returns a JSON indicators serialized with short names as keys and long names values.
-
-            :return str: a JSON indicators serialized with short names as keys and long names values.
-            """
-            return json.dumps(cls.as_dict(), indent=2)
-
+    @checker
     def get_watchlist(self, exchange, market=None):
-        """
-        Returns a formatted symbols list belonging to "market" will be returned after apply a format process based
+        """Returns a formatted symbols list belonging to "market" will be returned after apply a format process based
         on tradingview specs
 
         :param str exchange: a valid exchange name (example: BINANCE)
@@ -143,11 +80,10 @@ class TradingViewChart:
         """
         exchange = str(exchange).lower()
 
-        if exchange in ccxt.exchanges:
-            for api_version in range(2, 5):
-                api_version2check = '{}{:d}'.format(exchange, api_version)
-                if api_version2check in ccxt.exchanges:
-                    exchange = api_version2check
+        for api_version in range(2, 5):
+            api_version2check = '{}{:d}'.format(exchange, api_version)
+            if api_version2check in ccxt.exchanges:
+                exchange = api_version2check
 
             api = getattr(ccxt, exchange)({'timeout': 15000})  # type: ccxt.Exchange
             api.substituteCommonCurrencyCodes = False
@@ -171,49 +107,52 @@ class TradingViewChart:
 
             return watchlist_formatter(exchange, symbols_selection)
 
-    def launch(self, exchange, quote_currency=None, *indicators, **options):
-        """
-        Launch an embedded "tradingview.com" widget in "app" mode (if available) with default web browser.
+    def launch(self, exchange, indicators=None, quote_currency=None, **options):
+        """Launch an embedded "tradingview.com" widget in "app" mode (if available) with default web browser.
 
         :param str exchange: a valid exchange name (example: BINANCE)
         :param str quote_currency: a valid quote currency.
         :param indicators: list of indicators short names to show.
         :param options: [interval, theme, details, hotlist, calendar, news, hide_side_toolbar, locale, withdateranges]
         """
-        html_dir = Path(__file__).parent.joinpath('html')  # type: Path
-
-        params_file = str(html_dir.joinpath('params.json'))
-
-        default_params = json.load(params_file)
-        default_params.update(options)
-
         quote_currency = quote_currency if quote_currency else 'BTC'
 
-        if len(indicators):
-            indicators = [i for i in self.Indicators.keys() if i.upper() in map(str.upper, indicators)]
+        json_dir = Path(__file__).parent.joinpath('json')  # type: Path
+        html_dir = Path(__file__).parent.joinpath('html')  # type: Path
+
+        params = json_dir.joinpath('params.json')
+        params = json.loads(params.read_text())
+        params.update(options)
+
+        tv_indicators = json_dir.joinpath('tv_indicators.json')
+        tv_indicators = json.loads(tv_indicators.read_text())
+
+        if len(indicators or []):
+            indicators = [ind.upper() for ind in indicators]
+            indicators = [tv_indicators[i] for i in tv_indicators if i.upper() in indicators]
         else:
-            indicators = [self.Indicators.ChaikinOscillator, self.Indicators.ROC, self.Indicators.WilliamR,
-                          self.Indicators.MAExp, self.Indicators.MAExp, self.Indicators.LinearRegression]
+            indicators = [
+                tv_indicators['ChaikinOscillator'],
+                tv_indicators['ROC'],
+                tv_indicators['WilliamR'],
+                tv_indicators['MAExp'],
+                tv_indicators['MAExp'],
+                tv_indicators['LinearRegression']
+            ]
 
         watchlist = self.get_watchlist(exchange, quote_currency)
         symbol = options.get('symbol') or 'BINANCE:BTCUSDT'
 
-        default_params.update(symbol=symbol, watchlist=watchlist, studies=indicators)
+        params.update(symbol=symbol, watchlist=watchlist, studies=indicators)
 
         html_template_code = html_dir.joinpath('template.html').read_text()
-        html_template_code = html_template_code.replace('@PARAMETERS', json.dumps(default_params, indent=2))
+        html_template_code = html_template_code.replace('@PARAMETERS', json.dumps(params, indent=2))
 
         html_generated_file = html_dir.joinpath('generated.html')
         html_generated_file.touch(exist_ok=True)
         html_generated_file.write_text(html_template_code)
 
         generated_file_url = 'file://{}'.format(html_generated_file)
-        print(webbrowser.Chromium.args)
 
-        webbrowser.get(using='chromium-browser --app %s --new-window').open(generated_file_url, 1)
-
-
-@begin
-def main(exchange, quote_currency=None):
-    """TradingView Charts launcher"""
-    TradingViewChart().launch(exchange, quote_currency)
+        wb = webbrowser.get(using='chromium-browser --app="%s" --new-window')
+        wb.open(generated_file_url, 1)
