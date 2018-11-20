@@ -1,0 +1,26 @@
+{
+  "allow_symbol_change": true,
+  "autosize": true,
+  "calendar": false,
+  "container_id": "tradingview_496c6",
+  "details": true,
+  "enable_publishing": false,
+  "hide_side_toolbar": false,
+  "hotlist": false,
+  "interval": "15",
+  "locale": "en",
+  "news": [
+    "headlines"
+  ],
+  "popup_height": "650",
+  "popup_width": "1000",
+  "show_popup_button": true,
+  "studies": [],
+  "style": "1",
+  "symbol": "",
+  "theme": "Light",
+  "timezone": "Etc/UTC",
+  "toolbar_bg": "#f1f3f6",
+  "watchlist": [],
+  "withdateranges": true
+}
