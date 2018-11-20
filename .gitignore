@@ -13,3 +13,7 @@
 pytvc/__pycache__/
 .idea/markdown-exported-files.xml
 .idea/shellcheckPlugin.xml
+pytvc.egg-info/
+.idea/auto_sync.xml
+.idea/code-comments.xml
+.idea/codeStyles/
