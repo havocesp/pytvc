@@ -8,6 +8,7 @@
 import argparse
 import json
 import pathlib
+import sys
 from argparse import Namespace
 
 from pytvc import TradingViewChart
@@ -58,3 +59,7 @@ def run():
 
 if __name__ == '__main__':
     run()
+
+    generated_html = pathlib.Path(__file__).parent / 'html' / 'generated.html'  # type: pathlib.Path
+    if generated_html.exists():
+        generated_html.unlink()
