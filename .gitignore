@@ -1,5 +1,3 @@
-.idea/**/workspace.xml
-.idea/**/dictionaries
 .idea/GitLinkConfig.xml
 .idea/encodings.xml
 .idea/inspectionProfiles/
@@ -10,7 +8,6 @@
 .idea/pytvc.iml
 .idea/template/
 .idea/vcs.xml
-pytvc/__pycache__/
 .idea/markdown-exported-files.xml
 .idea/shellcheckPlugin.xml
 pytvc.egg-info/

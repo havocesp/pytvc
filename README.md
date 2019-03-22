@@ -42,7 +42,18 @@ pytvc binance cryptopia hitbtc --loop
 
 ## ChangeLog
 
+### 0.1.3
+
+- Added min volume filtering
+
+### 0.1.2
+
+- Removed duplicate "pytvc" dir
+- Added some lines to README.md
+- Minor errors fixed
+
 ### 0.1.1
+
 - Removed duplicate "pytvc" dir
 - Added some lines to README.md
 - Minor errors fixed

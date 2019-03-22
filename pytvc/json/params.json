@@ -17,10 +17,10 @@
   "show_popup_button": true,
   "studies": [],
   "style": "1",
-  "symbol": "",
+  "symbol": "BINANCE:BTCUSDT",
   "theme": "Light",
   "timezone": "Etc/UTC",
   "toolbar_bg": "#f1f3f6",
   "watchlist": [],
-  "withdateranges": true
+  "withdateranges": false
 }

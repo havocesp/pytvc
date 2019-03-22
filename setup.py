@@ -6,12 +6,11 @@ import pytvc
 classifiers = [
     'Development Status :: 5 - Production',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
 ]
 
-exclude = ['.idea*', 'build*', '{}.egg-info*'.format(pytvc.__package__), 'dist*', 'venv*', 'doc*', 'lab*']
+exclude = ['.idea*', 'build*', f'{pytvc.__package__}.egg-info*', 'dist*', 'venv*', 'doc*', 'lab*']
 
 setup(
     name=pytvc.__package__,
