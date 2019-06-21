@@ -5,7 +5,12 @@
 
 ## Description
 
-Just a simple browser launcher TradingView Chart launcher  with  widget 
+TradingView chart launcher from CLI using the Chrome (or similar) "desktop like" app launch feature
+
+Some features:
+- Set as many technical indicators as you need.
+- Watchlist 24h volume filtering.
+- Watchlist base market filtering.
 
 ## Installation
 
