@@ -12,6 +12,8 @@ classifiers = [
 
 exclude = ['.idea*', 'build*', f'{pytvc.__package__}.egg-info*', 'dist*', 'venv*', 'doc*', 'lab*']
 
+readme_file = Path(__file__).with_name('README.md')
+
 setup(
     name=pytvc.__package__,
     version=pytvc.__version__,
@@ -24,7 +26,7 @@ setup(
         ]
     },
     url=pytvc.__site__,
-    long_description=pytvc.__long_description__,
+    long_description=readme_file.read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
     license=pytvc.__license__,
     author=pytvc.__author__,
