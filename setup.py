@@ -17,7 +17,7 @@ setup(
     version=pytvc.__version__,
     packages=find_packages(exclude=exclude),
     package_dir={pytvc.__package__: pytvc.__package__},
-    package_data={pytvc.__package__: ['html/*.*']},
+    package_data={pytvc.__package__: ['html/*.*', 'json/*.*']},
     entry_points={
         'console_scripts': [
             'pytvc = pytvc.cli:run'
