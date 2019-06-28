@@ -48,7 +48,7 @@ def open_browser(url):
     """Open url using a "chrome like" found (or any when chrome like not found)"""
     global _BROWSERS, _CHROME_LIKE_BROWSERS
     for browser in _BROWSERS:
-        if len(shutil.which(browser)):
+        if shutil.which(browser):
             if browser in _CHROME_LIKE_BROWSERS:
                 return subprocess.call([browser, f'--app={url}', '--new-window'])
             else:
@@ -125,13 +125,13 @@ class TradingViewChart:
         """
         quote_currency = quote_currency if quote_currency else 'BTC'
 
-        json_dir = Path(__file__).parent.joinpath('json')  # type: Path
-        html_dir = Path(__file__).parent.joinpath('html')  # type: Path
+        json_dir = Path(__file__).with_name('json')  # type: Path
+        html_dir = Path(__file__).with_name('html')  # type: Path
 
         params = json_dir.joinpath('params.json')
         params = json.loads(params.read_text())
         params.update(options)
-
+        
         tv_indicators = json_dir.joinpath('tv_indicators.json')
         tv_indicators = json.loads(tv_indicators.read_text())
 
@@ -155,7 +155,9 @@ class TradingViewChart:
         params.update(symbol=symbol, watchlist=watchlist, studies=indicators)
 
         html_template_code = html_dir.joinpath('template.html').read_text()
-        html_template_code = html_template_code.replace('@PARAMETERS', json.dumps(params, indent=2))
+
+        params_json = json.dumps(params)
+        html_template_code = html_template_code.replace('@PARAMETERS', params_json)
 
         html_generated_file = html_dir.joinpath('generated.html')
         html_generated_file.touch(exist_ok=True)
