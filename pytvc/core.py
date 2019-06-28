@@ -8,7 +8,8 @@ from pathlib import Path
 import ccxt
 
 _CHROME_LIKE_BROWSERS = ['brave-browser', 'chromium', 'chromium-browser', 'google-chrome', 'chrome']
-_BROWSERS = _CHROME_LIKE_BROWSERS + ['firefox', 'mozilla', 'epiphany', 'konqueror', 'safari', 'opera', 'edge']
+_BROWSERS = ['firefox', 'firefox-esr', 'mozilla', 'epiphany', 'konqueror', 'safari', 'opera', 'edge']
+_BROWSERS += _CHROME_LIKE_BROWSERS
 
 
 class Symbol:
@@ -57,7 +58,7 @@ def open_browser(url):
 def get_volume_average(tickers) -> float:
     """Get volume average from tickers data.
 
-    :param dict tickers:
+    :param dict tickers: tickers data.
     :return: calculated volume average from tickers data.
     """
     all_volumes = [v['quoteVolume'] for v in tickers.values()]
@@ -133,11 +134,11 @@ class TradingViewChart:
         """
         quote_currency = quote_currency if quote_currency else 'BTC'
 
-        json_dir = Path(__file__).with_name('json')  # type: Path
-        html_dir = Path(__file__).with_name('html')  # type: Path
+        json_dir: Path = Path(__file__).with_name('json')
+        html_dir: Path = Path(__file__).with_name('html')
 
         params = json_dir.joinpath('params.json')
-        params = json.loads(params.read_text())
+        params = json.loads(params.read_text(encoding='utf-8'))
         params.update(options)
 
         tv_indicators = json_dir.joinpath('tv_indicators.json')
