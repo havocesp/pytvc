@@ -47,6 +47,11 @@ pytvc binance cryptopia hitbtc --loop
 
 ## ChangeLog
 
+### 0.1.4
+- CLI params simplified
+- Added Brave browser
+- Many errors fixed
+
 ### 0.1.3
 
 - Added min volume filtering
