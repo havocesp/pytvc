@@ -30,7 +30,7 @@ def load_indicators():
     return ti 
 
 
-def list_indicators() -> int:
+def list_indicators(*args, **kwargs) -> int:
     """List all supported indicators.
 
     :return: 0 if all was fine.
@@ -43,8 +43,12 @@ def list_indicators() -> int:
     return 0
 
 
-def main(args):
-    """TradingView Chart launcher."""
+def main(args) -> int:
+    """TradingView Chart launcher.
+    
+    :param args:
+    :return:
+    """
     tvc = TradingViewChart()
     tvc.launch(**vars(args))
     return 0
@@ -56,7 +60,7 @@ def run() -> int:
     :return: a 0 value for execution success or a non zero value containing the clue about where to find the error :-).
     :rtype: int
     """
-    # system return code
+    # exit code
     r_code = 0
 
     base_markets = ['BTC', 'TUSD', 'USDT', 'USD', 'EUR', 'PAX', 'USDS']
