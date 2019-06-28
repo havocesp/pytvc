@@ -13,8 +13,6 @@ from pathlib import Path
 
 from .core import TradingViewChart
 
-_indicators = None
-
 
 def load_indicators():
     """Load indicators from file.
@@ -89,7 +87,7 @@ def run() -> int:
     launch.add_argument('-i', '--indicator',
                         metavar='TI',
                         nargs='*',
-                        choices=list(_indicators.keys()),
+                        choices=list(load_indicators().keys()),
                         help='Technical analysis indicators to be showed within chart.')
 
     launch.add_argument('-m', '--min-volume',
