@@ -9,6 +9,7 @@
 import argparse
 import json
 import sys
+from argparse import Namespace
 from pathlib import Path
 
 from .core import TradingViewChart
@@ -45,9 +46,9 @@ def list_indicators() -> int:
 
 
 def main(args) -> int:
-    """TradingView Chart parser.r.
+    """TradingView Chart parserr.
     
-    :param args:
+    :param Namespace args:
     :return:
     """
     tvc = TradingViewChart()
@@ -55,19 +56,17 @@ def main(args) -> int:
     return 0
 
 
-def run() -> int:
-    """As CLI starting point, this function dispatch argument parsing to be supplied to main function.
-
-    :return: a 0 value for execution success or a non zero value containing the clue about where to find the error :-).
-    """
+def run():
+    """As CLI starting point, this function dispatch argument parsing to be supplied to main function."""
     base_markets = ['BTC', 'TUSD', 'USDT', 'USD', 'EUR', 'PAX', 'USDS']
     exchanges = ['binance', 'hitbtc2', 'poloniex', 'kraken', 'coinbase', 'cexio']
     exchanges = {e: e.strip('_12345 ') for e in exchanges}
 
-    parser = argparse.ArgumentParser()                                                                                                                                   
-                                                                                                                                                                         
-    parser.add_argument('-l, --list-indicators',                                                                                                                         
-                        dest='list_indicators',                                                                                                                          
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-l, --list-indicators',
+                        action='store_true',
+                        dest='list_indicators',
                         help='List all supported technical indicators')                                                                                                  
                                                                                                                                                                          
     parser.add_argument('-e, --exchange',                                                                                                                                
