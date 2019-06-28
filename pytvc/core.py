@@ -9,12 +9,12 @@ import ccxt
 
 _EX_SYMBOL_FMT = '{}:{}{}'
 
-_CHROME_LIKE_BROWSERS = ['chromium', 'chromium-browser', 'brave-browser', 'google-chrome', 'chrome']
+_CHROME_LIKE_BROWSERS = ['brave-browser', 'chromium', 'chromium-browser', 'google-chrome', 'chrome']
 _BROWSERS = _CHROME_LIKE_BROWSERS + ['firefox', 'mozilla', 'epiphany', 'konqueror', 'safari', 'opera', 'edge']
 
 
 class Symbol:
-    """Symbol class"""
+    """Symbol class."""
 
     def __init__(self, ref):
         if '/' in str(ref):
@@ -56,7 +56,12 @@ def open_browser(url):
     return 1
 
 
-def get_volume_average(tickers):
+def get_volume_average(tickers) -> float:
+    """Get volume average from tickers data.
+
+    :param dict tickers:
+    :return: calculated volume average from tickers data.
+    """
     all_volumes = [v['quoteVolume'] for v in tickers.values()]
     avg = sum(all_volumes) / len(all_volumes)
     return avg
@@ -80,19 +85,24 @@ class TradingViewChart:
 
         for api_version in range(2, 5):
             api_version2check = f'{exchange}{api_version:d}'
+
             if api_version2check in ccxt.exchanges:
                 exchange = api_version2check
 
-            api = getattr(ccxt, exchange)({'timeout': 15000})  # type: ccxt.Exchange
-            api.substituteCommonCurrencyCodes = True
+            api = getattr(ccxt, exchange)({
+                'timeout':                       15000,
+                'substituteCommonCurrencyCodes': True
+            })
+
             api.load_markets()
-            symbols = api.symbols
 
-            base_markets = {Symbol(s).quote for s in symbols}
+            base_markets = {Symbol(s).quote for s in api.symbols}
+            market = str(market or '').upper()
+            market = market if market in base_markets else 'BTC'
 
-            market = str(market).upper() if market and market in base_markets else 'BTC'
-            # ccc = api.common_currency_code
-            filtered_symbols = [f'{s.base}/{market}' for s in map(Symbol, symbols) if s.quote in market]
+            filtered_symbols = [f'{api.common_currency_code(s.base)}/{market}'
+                                for s in map(Symbol, api.symbols)
+                                if s.quote in market and s.base != s.quote]
 
             tickers = api.fetch_tickers(filtered_symbols)
 
@@ -131,7 +141,7 @@ class TradingViewChart:
         params = json_dir.joinpath('params.json')
         params = json.loads(params.read_text())
         params.update(options)
-        
+
         tv_indicators = json_dir.joinpath('tv_indicators.json')
         tv_indicators = json.loads(tv_indicators.read_text())
 
