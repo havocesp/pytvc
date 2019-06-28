@@ -11,7 +11,7 @@ import json
 import sys
 from pathlib import Path
 
-from core import TradingViewChart
+from .core import TradingViewChart
 
 _indicators = None
 
