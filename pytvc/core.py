@@ -7,8 +7,6 @@ from pathlib import Path
 
 import ccxt
 
-_EX_SYMBOL_FMT = '{}:{}{}'
-
 _CHROME_LIKE_BROWSERS = ['brave-browser', 'chromium', 'chromium-browser', 'google-chrome', 'chrome']
 _BROWSERS = _CHROME_LIKE_BROWSERS + ['firefox', 'mozilla', 'epiphany', 'konqueror', 'safari', 'opera', 'edge']
 
@@ -38,7 +36,7 @@ def watchlist_formatter(exchange, symbols):
     :return list: symbols list after formatting process.
     """
     exchange = str(exchange).upper()
-    result = [_EX_SYMBOL_FMT.format(exchange, s.base, s.quote)
+    result = [f'{exchange}:{s.base}{s.quote}'
               for s in map(Symbol, symbols)
               if s.base not in ['PAX']]
     return result
