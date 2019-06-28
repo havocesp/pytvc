@@ -1,16 +1,1 @@
-.idea/GitLinkConfig.xml
-.idea/encodings.xml
-.idea/inspectionProfiles/
-.idea/markdown-navigator.xml
-.idea/markdown-navigator/
-.idea/misc.xml
-.idea/modules.xml
-.idea/pytvc.iml
-.idea/template/
-.idea/vcs.xml
-.idea/markdown-exported-files.xml
-.idea/shellcheckPlugin.xml
-pytvc.egg-info/
-.idea/auto_sync.xml
-.idea/code-comments.xml
-.idea/codeStyles/
+.idea
