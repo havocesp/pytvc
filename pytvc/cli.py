@@ -21,15 +21,15 @@ def load_indicators():
 
     :return:
     """
-    ti = list()
+    ti = dict()
     try:
-        ti_file: Path = Path(__file__).parent / 'json' / 'tv_indicators.json'
+        ti_file: Path = Path(__file__).with_name('json').joinpath('tv_indicators.json')
         if ti_file.exists() and ti_file.is_file():
             text = ti_file.read_text()
             ti = json.loads(text)
     except (TypeError, ValueError, IOError,) as err:
         print(str(err))
-    return ti
+    return ti 
 
 
 def list_indicators() -> int:
