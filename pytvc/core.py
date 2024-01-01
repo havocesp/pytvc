@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 
 import ccxt
+from security import safe_command
 
 _CHROME_LIKE_BROWSERS = ['brave-browser', 'chromium', 'chromium-browser', 'google-chrome', 'chrome']
 _BROWSERS = ['firefox', 'firefox-esr', 'mozilla', 'epiphany', 'konqueror', 'safari', 'opera', 'edge']
@@ -49,9 +50,9 @@ def open_browser(url):
     for browser in _BROWSERS:
         if shutil.which(browser):
             if browser in _CHROME_LIKE_BROWSERS:
-                return subprocess.call([browser, f'--app={url}', '--new-window'])
+                return safe_command.run(subprocess.call, [browser, f'--app={url}', '--new-window'])
             else:
-                return subprocess.call([browser, f'{url}'])
+                return safe_command.run(subprocess.call, [browser, f'{url}'])
     return 1
 
 
